@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="min-h-[80vh] flex items-center justify-center relative z-10 animate-fade-in-up py-10">
+    
+    <div class="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-emerald-400/20 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-80 h-80 bg-teal-400/10 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 w-full max-w-5xl gap-12 lg:gap-20 items-center px-4">
+
+        <div class="hidden lg:flex flex-col justify-center relative">
+            
+            <div class="space-y-8 relative z-10">
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-2xl shadow-emerald-500/30 transform rotate-6 hover:rotate-0 transition duration-500">
+                    <i class="fa-solid fa-leaf text-4xl"></i>
+                </div>
+                
+                <div>
+                    <h1 class="text-5xl font-black text-emerald-950 leading-[1.15] mb-4">
+                        Selamat Datang <br>
+                        di <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Sajiwa.</span>
+                    </h1>
+                    <p class="text-emerald-900/60 text-lg leading-relaxed max-w-md font-medium">
+                        Sistem manajemen lingkungan terpadu untuk mewujudkan kawasan yang bersih, sehat, dan bernilai ekonomis.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-4 pt-2">
+                    <div class="flex -space-x-4">
+                        <div class="w-12 h-12 rounded-full border-4 border-[#f5f5f0] bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="w-12 h-12 rounded-full border-4 border-[#f5f5f0] bg-gray-300 flex items-center justify-center text-xs font-bold text-gray-500">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="w-12 h-12 rounded-full border-4 border-[#f5f5f0] bg-emerald-100 flex items-center justify-center text-xs font-bold text-emerald-600">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm text-emerald-950 font-bold">Bergabunglah Sekarang</p>
+                        <p class="text-xs text-emerald-900/50">Bersama warga lainnya.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full max-w-md mx-auto">
+            
+            <div class="bg-white/60 backdrop-blur-xl p-8 md:p-10 rounded-[2.5rem] border border-white/60 shadow-xl shadow-emerald-900/5 relative overflow-hidden group hover:shadow-2xl hover:shadow-emerald-900/10 transition duration-500">
+                
+                <div class="lg:hidden text-center mb-10">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg mb-4">
+                        <i class="fa-solid fa-leaf text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-emerald-950">Masuk Akun</h2>
+                    <p class="text-sm text-emerald-900/50 mt-2 font-medium">Silakan login untuk mengakses fitur.</p>
+                </div>
+
+                <div class="hidden lg:block mb-8">
+                    <h2 class="text-2xl font-black text-emerald-950">Akses Masuk</h2>
+                    <p class="text-sm text-emerald-900/50 mt-2 font-medium">Masukkan kredensial Anda untuk melanjutkan.</p>
+                </div>
+
+                <form method="POST" class="space-y-6" x-data="{ showPass: false }">
+                    {% csrf_token %}
+
+                    <div class="space-y-2 group/input">
+                        <label class="text-xs font-bold text-emerald-800 ml-1 uppercase tracking-wider opacity-70 group-hover/input:opacity-100 transition">Username</label>
+                        <div class="relative transition-transform duration-300 focus-within:scale-[1.02]">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-emerald-900/30 group-focus-within/input:text-emerald-600 transition">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <input type="text" name="username" required 
+                                class="w-full bg-white border border-emerald-900/10 text-emerald-950 text-sm rounded-xl pl-11 pr-4 py-4 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition placeholder-emerald-900/20 shadow-sm"
+                                placeholder="Username Anda...">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 group/input">
+                        <label class="text-xs font-bold text-emerald-800 ml-1 uppercase tracking-wider opacity-70 group-hover/input:opacity-100 transition">Password</label>
+                        <div class="relative transition-transform duration-300 focus-within:scale-[1.02]">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-emerald-900/30 group-focus-within/input:text-emerald-600 transition">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <input :type="showPass ? 'text' : 'password'" name="password" required 
+                                class="w-full bg-white border border-emerald-900/10 text-emerald-950 text-sm rounded-xl pl-11 pr-12 py-4 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition placeholder-emerald-900/20 shadow-sm"
+                                placeholder="••••••••">
+                            
+                            <button type="button" @click="showPass = !showPass" 
+                                class="absolute inset-y-0 right-0 pr-4 flex items-center text-emerald-900/30 hover:text-emerald-600 cursor-pointer transition">
+                                <i class="fa-solid" :class="showPass ? 'fa-eye-slash' : 'fa-eye'"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-600/20 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-600/30 flex justify-center items-center gap-2 mt-6">
+                        <span>Masuk Sekarang</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    </button>
+
+                </form>
+
+                <div class="mt-8 text-center pt-6 border-t border-emerald-900/5">
+                    <p class="text-xs text-emerald-900/50 font-medium">
+                        Belum punya akun? 
+                        <a href="#" class="text-emerald-600 font-bold hover:text-emerald-500 hover:underline transition ml-1" onclick="alert('Silakan hubungi Admin RT/RW setempat untuk pembuatan akun baru.'); return false;">
+                            Hubungi Admin
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

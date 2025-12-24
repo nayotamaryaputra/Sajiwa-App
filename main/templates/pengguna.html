@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    @keyframes shine {
+        0% { transform: translateX(-150%) skewX(-15deg); }
+        50%, 100% { transform: translateX(150%) skewX(-15deg); }
+    }
+    .card-shine {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transform: skewX(-15deg);
+        animation: shine 6s infinite;
+        pointer-events: none;
+    }
+</style>
+
+<div class="max-w-5xl mx-auto mb-24 px-4 relative z-10 animate-fade-in-up">
+
+    <div class="text-center mb-12 pt-8">
+        <div class="relative inline-block mb-6 group">
+            <div class="w-32 h-32 rounded-full p-1 bg-gradient-to-br from-emerald-400 to-teal-600 shadow-xl shadow-emerald-500/20 mx-auto">
+                <div class="w-full h-full rounded-full bg-white p-1">
+                    <div class="w-full h-full rounded-full bg-emerald-50 overflow-hidden flex items-center justify-center relative">
+                        {% if user.profilpengguna.foto %}
+                            <img src="{{ user.profilpengguna.foto.url }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <span class="text-5xl font-black text-emerald-800 uppercase">{{ user.username|slice:":1" }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 z-20">
+                <span class="bg-emerald-950 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg border-2 border-white">
+                    {{ user.profilpengguna.peran }}
+                </span>
+            </div>
+        </div>
+        
+        <h1 class="text-4xl font-black text-emerald-950 tracking-tight mb-2">{{ user.username }}</h1>
+        <div class="flex items-center justify-center gap-2 text-sm text-emerald-900/60 font-medium">
+            <i class="fa-regular fa-envelope text-emerald-500"></i>
+            <span>{{ user.email }}</span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch mb-10">
+
+        {% if user.profilpengguna.peran != 'admin_sajiwa' %}
+        <div class="relative h-64 rounded-[2rem] overflow-hidden shadow-2xl shadow-emerald-900/20 group transition-transform hover:-translate-y-1 duration-300">
+            <div class="absolute inset-0 bg-[#022c22] z-0"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-900 to-emerald-950 z-0"></div>
+            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 20px 20px;"></div>
+            
+            <div class="card-shine"></div>
+
+            <div class="relative z-10 p-8 flex flex-col justify-between h-full text-white">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-emerald-400 text-lg border border-white/10 backdrop-blur-sm">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div>
+                            <p class="text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em]">Sajiwa Pay</p>
+                            <p class="text-white/40 text-[10px] uppercase font-medium">Balance</p>
+                        </div>
+                    </div>
+                    <div class="italic font-serif text-white/20 text-xl font-bold">Sajiwa<span class="text-emerald-500">.</span></div>
+                </div>
+
+                <div class="py-2">
+                    <h2 class="text-white text-5xl font-mono font-bold tracking-tighter">
+                        <span class="text-2xl align-top text-emerald-500 mr-1 font-sans font-bold">Rp</span>{{ user.profilpengguna.poin }}
+                    </h2>
+                </div>
+
+                <div class="flex justify-between items-end mt-auto">
+                    <div>
+                        <div class="flex gap-2 mb-2 opacity-80">
+                            <div class="w-11 h-8 rounded-lg bg-gradient-to-br from-yellow-200 via-yellow-400 to-yellow-600 shadow-sm border border-yellow-600/50"></div>
+                            <i class="fa-solid fa-wifi text-white/50 rotate-90 text-xl ml-1 mt-1"></i>
+                        </div>
+                        <p class="text-white/60 font-mono text-sm tracking-widest">
+                            **** {{ user.id|stringformat:"04d" }}
+                        </p>
+                    </div>
+                    
+                    <a href="{% url 'riwayat' %}" class="px-5 py-2.5 rounded-xl bg-white text-emerald-950 text-xs font-bold transition hover:bg-emerald-50 hover:scale-105 shadow-lg">
+                        Lihat Mutasi
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user.profilpengguna.peran == 'warga' %}
+        <div class="relative h-64 rounded-[2rem] overflow-hidden shadow-2xl shadow-emerald-900/20 group transition-transform hover:-translate-y-1 duration-300">
+            
+            <div class="absolute inset-0 bg-gradient-to-br {{ bg_card }} z-0"></div>
+            
+            <div class="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+            
+            <div class="card-shine" style="animation-delay: 3s;"></div>
+
+            <div class="relative z-10 p-8 flex flex-col justify-between h-full text-white">
+                
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-white/80 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Membership</p>
+                        <h2 class="text-3xl font-black italic flex items-center gap-2 drop-shadow-sm uppercase">
+                            {{ level_user }} <i class="fa-solid {{ icon_medal }} text-2xl opacity-90"></i>
+                        </h2>
+                    </div>
+                    <div class="text-center bg-black/10 backdrop-blur-md border border-white/20 rounded-xl px-3 py-2 min-w-[70px]">
+                        <span class="block text-2xl font-bold leading-none">{{ voucher_dapat }}</span>
+                        <span class="text-[8px] uppercase font-bold opacity-80">Voucher</span>
+                    </div>
+                </div>
+
+                <div class="flex items-end gap-2 my-2">
+                    <span class="text-4xl font-bold">{{ xp_saat_ini }}</span>
+                    <span class="text-sm font-bold opacity-80 mb-1.5 uppercase tracking-wide">XP Terkumpul</span>
+                </div>
+
+                <div class="bg-black/20 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                    <div class="flex justify-between text-[10px] font-bold uppercase mb-2 tracking-wider text-white/90">
+                        <span>Progress Level</span>
+                        <span>{{ persen_progress }}%</span>
+                    </div>
+                    
+                    <div class="relative w-full h-2 bg-black/30 rounded-full overflow-hidden">
+                        <div class="absolute top-0 left-0 h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" 
+                             style="width: {{ persen_progress }}%;"></div>
+                    </div>
+
+                    <p class="text-[10px] mt-2 text-right text-white/80 font-medium">
+                        {% if level_user != 'Gold' %}
+                        Next: <span class="text-white font-bold">{{ target_poin }} XP</span> ({{ next_level_name }})
+                        {% else %}
+                        <span class="text-yellow-200 font-bold"><i class="fa-solid fa-crown mr-1"></i> MAX LEVEL REACHED</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user.profilpengguna.peran == 'kurir' %}
+        <div class="h-64 rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-700 p-8 flex flex-col justify-center items-center text-center relative overflow-hidden group shadow-2xl shadow-blue-500/20">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+            <div class="w-20 h-20 rounded-2xl bg-white/10 text-white flex items-center justify-center text-4xl mb-4 border border-white/20 backdrop-blur-sm shadow-lg group-hover:scale-110 transition duration-300 transform rotate-3">
+                <i class="fa-solid fa-motorcycle"></i>
+            </div>
+            <h3 class="text-2xl font-black text-white mb-2 relative z-10">Mitra Kurir Official</h3>
+            <p class="text-blue-100 text-sm max-w-xs mx-auto relative z-10 font-medium leading-relaxed">
+                Terima kasih telah menjadi garda terdepan kebersihan lingkungan kita.
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden">
+        
+        <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+
+        <div class="flex items-center gap-4 mb-10 border-b border-emerald-900/5 pb-6">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shadow-inner">
+                <i class="fa-solid fa-id-card-clip"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-black text-emerald-950">Informasi Akun</h3>
+                <p class="text-sm text-emerald-900/50 font-medium">Detail data diri yang terdaftar di sistem.</p>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12 relative z-10">
+            <div class="group">
+                <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                </p>
+                <p class="text-xl text-emerald-950 font-bold font-mono tracking-tight group-hover:text-emerald-700 transition">
+                    {{ user.profilpengguna.no_hp|default:"-" }}
+                </p>
+            </div>
+
+            <div class="group">
+                <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-at"></i> Email
+                </p>
+                <p class="text-xl text-emerald-950 font-bold truncate group-hover:text-emerald-700 transition">
+                    {{ user.email|default:"-" }}
+                </p>
+            </div>
+            
+            {% if user.profilpengguna.area %}
+            <div class="md:col-span-2 bg-white border border-emerald-900/5 rounded-2xl p-6 flex items-start gap-5 shadow-sm hover:shadow-md transition group">
+                <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 shrink-0 mt-1">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-emerald-900/40 font-bold uppercase tracking-widest mb-1">Titik Jemput Utama</p>
+                    <p class="text-emerald-950 font-bold text-lg leading-tight">{{ user.profilpengguna.area.nama_jalan }}</p>
+                    <p class="text-sm text-emerald-700 mt-1 font-medium bg-emerald-50 inline-block px-2 py-0.5 rounded-md">
+                        {{ user.profilpengguna.area.rt_rw }}
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="mt-12 pt-8 border-t border-emerald-900/5 flex justify-center">
+            <form action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="group relative px-8 py-3.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-2xl overflow-hidden transition-all duration-300 font-bold text-sm shadow-sm hover:shadow-lg hover:shadow-rose-500/10 flex items-center gap-3">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-lg group-hover:-translate-x-1 transition-transform"></i>
+                    <span>Keluar Aplikasi</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

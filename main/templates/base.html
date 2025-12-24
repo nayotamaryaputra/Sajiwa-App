@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sajiwa - Manajemen Lingkungan</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sajiwa: {
+                            paper: '#f5f5f0',   /* Warna Kertas Jerami */
+                            dark: '#022c22',    /* Emerald 950 (Deep Forest) */
+                            leaf: '#10b981',    /* Emerald 500 */
+                            wood: '#92400e',    /* Amber 700 */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* BASE STYLE */
+        body {
+            background-color: #f5f5f0; /* Warm Paper Color */
+            color: #1c1917;
+            background-image: radial-gradient(#a8a29e 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+            /* opacity pattern handled in bg color mixing */
+        }
+
+        /* PAGE LOADER (ANIMASI TRANSISI) */
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: #022c22; /* Forest Green */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease-in-out, visibility 0.6s;
+        }
+        .loader-content {
+            text-align: center;
+            color: white;
+        }
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #022c22; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen relative overflow-x-hidden selection:bg-emerald-500 selection:text-white"
+      x-data="{ mobileMenu: false, scrolled: false }" 
+      @scroll.window="scrolled = (window.pageYOffset > 20)">
+
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="relative w-20 h-20 mx-auto mb-4">
+                <div class="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-20"></div>
+                <div class="relative w-full h-full bg-white rounded-full flex items-center justify-center text-emerald-800 text-3xl shadow-[0_0_30px_rgba(16,185,129,0.5)]">
+                    <i class="fa-solid fa-leaf animate-bounce"></i>
+                </div>
+            </div>
+            <p class="text-emerald-100 font-bold tracking-[0.2em] uppercase text-sm animate-pulse">Memuat Sajiwa...</p>
+        </div>
+    </div>
+
+    <nav :class="{ 'bg-[#022c22]/90 backdrop-blur-md shadow-lg py-3': scrolled, 'bg-transparent py-6': !scrolled }" 
+         class="fixed top-0 w-full z-50 transition-all duration-500 border-b border-transparent"
+         :style="scrolled ? 'border-bottom-color: rgba(255,255,255,0.1)' : ''">
+        
+        <div class="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
+            
+            <a href="{% url 'beranda' %}" onclick="animateTransition(event, this.href)" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white flex items-center justify-center shadow-lg group-hover:rotate-12 transition duration-300">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-extrabold tracking-tight leading-none transition-colors duration-300"
+                          :class="scrolled ? 'text-white' : 'text-emerald-950'">
+                        Sajiwa<span class="text-emerald-500">.</span>
+                    </span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest transition-colors duration-300"
+                          :class="scrolled ? 'text-emerald-400' : 'text-emerald-700'">
+                        Waste Bank
+                    </span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center gap-1 p-1 rounded-full transition-all duration-500"
+                 :class="scrolled ? 'bg-white/10 border border-white/5' : 'bg-white/60 border border-emerald-900/5 backdrop-blur-sm'">
+                
+                <a href="{% url 'beranda' %}" onclick="animateTransition(event, this.href)" 
+                   class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 relative overflow-hidden group 
+                   {% if request.resolver_match.url_name == 'beranda' %}text-white bg-emerald-600 shadow-lg{% else %}hover:bg-emerald-100/50{% endif %}"
+                   :class="(!scrolled && '{{ request.resolver_match.url_name }}' != 'beranda') ? 'text-emerald-900' : (scrolled && '{{ request.resolver_match.url_name }}' != 'beranda' ? 'text-emerald-100' : '')">
+                   Beranda
+                </a>
+
+                <a href="{% url 'berita' %}" onclick="animateTransition(event, this.href)" 
+                   class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300
+                   {% if request.resolver_match.url_name == 'berita' %}text-white bg-emerald-600 shadow-lg{% else %}hover:bg-emerald-100/50{% endif %}"
+                   :class="(!scrolled && '{{ request.resolver_match.url_name }}' != 'berita') ? 'text-emerald-900' : (scrolled && '{{ request.resolver_match.url_name }}' != 'berita' ? 'text-emerald-100' : '')">
+                   Berita
+                </a>
+
+                <a href="{% url 'jemput' %}" onclick="animateTransition(event, this.href)" 
+                   class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2
+                   {% if request.resolver_match.url_name == 'jemput' %}text-white bg-emerald-600 shadow-lg{% else %}hover:bg-emerald-100/50{% endif %}"
+                   :class="(!scrolled && '{{ request.resolver_match.url_name }}' != 'jemput') ? 'text-emerald-900' : (scrolled && '{{ request.resolver_match.url_name }}' != 'jemput' ? 'text-emerald-100' : '')">
+                   Jemput
+                   {% if not user.is_authenticated %}<i class="fa-solid fa-lock text-[10px] opacity-50"></i>{% endif %}
+                </a>
+
+                <a href="{% url 'riwayat' %}" onclick="animateTransition(event, this.href)" 
+                   class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2
+                   {% if request.resolver_match.url_name == 'riwayat' %}text-white bg-emerald-600 shadow-lg{% else %}hover:bg-emerald-100/50{% endif %}"
+                   :class="(!scrolled && '{{ request.resolver_match.url_name }}' != 'riwayat') ? 'text-emerald-900' : (scrolled && '{{ request.resolver_match.url_name }}' != 'riwayat' ? 'text-emerald-100' : '')">
+                   Riwayat
+                   {% if not user.is_authenticated %}<i class="fa-solid fa-lock text-[10px] opacity-50"></i>{% endif %}
+                </a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-4">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'pengguna' %}" onclick="animateTransition(event, this.href)" class="flex items-center gap-3 pl-5 border-l border-emerald-900/10 group">
+                        <div class="text-right hidden lg:block">
+                            <p class="text-sm font-bold transition-colors" :class="scrolled ? 'text-white' : 'text-emerald-950'">{{ user.username }}</p>
+                            <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider bg-emerald-100 px-2 rounded-md inline-block">
+                                {{ user.profilpengguna.peran }}
+                            </p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full p-[2px] border-2 border-emerald-500 group-hover:scale-110 transition">
+                            <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=047857&color=fff" class="w-full h-full rounded-full">
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" onclick="animateTransition(event, this.href)" class="relative group px-6 py-2.5 bg-emerald-900 text-white rounded-xl font-bold shadow-lg shadow-emerald-900/20 hover:bg-emerald-800 transition-all hover:-translate-y-0.5 overflow-hidden">
+                        <span class="relative z-10 flex items-center gap-2">Masuk <i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                    </a>
+                {% endif %}
+            </div>
+
+            <button @click="mobileMenu = !mobileMenu" class="md:hidden text-emerald-800 p-2 bg-emerald-100 rounded-lg transition">
+                <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+        </div>
+
+        <div x-show="mobileMenu" class="absolute top-24 left-4 right-4 md:hidden z-50">
+            <div class="bg-[#022c22] text-white rounded-2xl p-4 flex flex-col gap-2 shadow-2xl border border-white/10">
+                <a href="{% url 'beranda' %}" onclick="animateTransition(event, this.href)" class="p-3 rounded-xl hover:bg-emerald-800 flex items-center gap-3"><i class="fa-solid fa-house w-6 text-emerald-400"></i> Beranda</a>
+                <a href="{% url 'berita' %}" onclick="animateTransition(event, this.href)" class="p-3 rounded-xl hover:bg-emerald-800 flex items-center gap-3"><i class="fa-solid fa-newspaper w-6 text-emerald-400"></i> Berita</a>
+                <a href="{% url 'jemput' %}" onclick="animateTransition(event, this.href)" class="p-3 rounded-xl hover:bg-emerald-800 flex items-center gap-3"><i class="fa-solid fa-truck w-6 text-emerald-400"></i> Jemput</a>
+                <a href="{% url 'riwayat' %}" onclick="animateTransition(event, this.href)" class="p-3 rounded-xl hover:bg-emerald-800 flex items-center gap-3"><i class="fa-solid fa-clock-rotate-left w-6 text-emerald-400"></i> Riwayat</a>
+                
+                <div class="h-px bg-white/10 my-1"></div>
+                
+                {% if user.is_authenticated %}
+                    <a href="{% url 'pengguna' %}" onclick="animateTransition(event, this.href)" class="p-3 rounded-xl bg-emerald-600 text-center font-bold">Profil {{ user.username }}</a>
+                    <form action="{% url 'logout' %}" method="post" onsubmit="animateTransition(event, null, true)">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full p-3 rounded-xl bg-red-500/20 text-red-300 hover:bg-red-500 hover:text-white transition font-bold mt-2">Keluar Akun</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" onclick="animateTransition(event, this.href)" class="p-3 rounded-xl bg-emerald-600 text-center font-bold">Login Sekarang</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-32 pb-12 w-full max-w-7xl mx-auto px-4 md:px-6 relative z-10 animate-fade-in-up">
+        
+        {% if messages %}
+        <div class="fixed top-24 right-4 z-[100] flex flex-col gap-3 w-full max-w-sm pointer-events-none">
+            {% for message in messages %}
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" 
+                 class="pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-xl transition-all transform hover:scale-105 bg-white border-l-4
+                        {% if message.tags == 'success' %}border-l-emerald-500 text-emerald-800{% else %}border-l-rose-500 text-rose-800{% endif %}">
+                <div class="flex-1 font-medium">{{ message }}</div>
+                <button @click="show = false" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="mt-auto relative bg-[#022c22] text-emerald-100/80 overflow-hidden font-sans border-t-4 border-emerald-600">
+    
+    <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+    <i class="fa-solid fa-leaf absolute -bottom-10 -right-10 text-[15rem] text-white/5 rotate-[-20deg] pointer-events-none"></i>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-50"></div>
+
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-16 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            
+            <div class="space-y-4">
+                <a href="/" class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-tight text-white">Sajiwa<span class="text-emerald-500">.</span></span>
+                </a>
+                <p class="text-sm leading-relaxed text-emerald-100/70">
+                    Platform manajemen limbah digital yang menghubungkan warga dengan pengepul untuk menciptakan lingkungan yang lebih bersih dan bernilai ekonomis.
+                </p>
+                <div class="pt-2">
+                    <span class="inline-block px-3 py-1 rounded-full bg-emerald-900/50 border border-emerald-500/30 text-xs font-bold text-emerald-400">
+                        v1.0 Beta Release
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-white font-bold text-lg mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-compass text-emerald-500 text-xs"></i> Eksplorasi
+                </h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="{% url 'beranda' %}" class="hover:text-emerald-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><i class="fa-solid fa-angle-right text-[10px] opacity-50"></i> Beranda</a></li>
+                    <li><a href="{% url 'berita' %}" class="hover:text-emerald-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><i class="fa-solid fa-angle-right text-[10px] opacity-50"></i> Berita & Edukasi</a></li>
+                    <li><a href="{% url 'jemput' %}" class="hover:text-emerald-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><i class="fa-solid fa-angle-right text-[10px] opacity-50"></i> Layanan Jemput</a></li>
+                    <li><a href="{% url 'riwayat' %}" class="hover:text-emerald-400 hover:pl-2 transition-all duration-300 flex items-center gap-2"><i class="fa-solid fa-angle-right text-[10px] opacity-50"></i> Cek Poin</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-white font-bold text-lg mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-headset text-emerald-500 text-xs"></i> Hubungi Kami
+                </h3>
+                <ul class="space-y-4 text-sm">
+                    <li class="flex items-start gap-3">
+                        <i class="fa-solid fa-location-dot mt-1 text-emerald-500"></i>
+                        <span>Jl. Lestari Lingkungan No. 88,<br>Jakarta Selatan, Indonesia</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-envelope text-emerald-500"></i>
+                        <a href="mailto:halo@sajiwa.id" class="hover:text-white transition">halo@sajiwa.id</a>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-brands fa-whatsapp text-emerald-500 text-lg"></i>
+                        <a href="#" class="hover:text-white transition">+62 812-3456-7890</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-white font-bold text-lg mb-6">Tetap Terhubung</h3>
+                <p class="text-xs mb-4 text-emerald-100/60">Ikuti media sosial kami untuk tips daur ulang harian.</p>
+                
+                <div class="flex gap-3 mb-6">
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-emerald-600 hover:border-emerald-500 hover:text-white transition duration-300 group">
+                        <i class="fa-brands fa-instagram text-lg group-hover:scale-110 transition"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-blue-600 hover:border-blue-500 hover:text-white transition duration-300 group">
+                        <i class="fa-brands fa-facebook-f text-lg group-hover:scale-110 transition"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-sky-500 hover:border-sky-400 hover:text-white transition duration-300 group">
+                        <i class="fa-brands fa-twitter text-lg group-hover:scale-110 transition"></i>
+                    </a>
+                </div>
+
+                <div class="bg-black/20 p-4 rounded-xl border border-white/5 text-center">
+                    <p class="text-xs font-mono text-emerald-500">Built with <i class="fa-solid fa-heart text-red-500 mx-1 animate-pulse"></i> for Nature</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="bg-[#011c16] border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-emerald-100/40">
+            <p>&copy; 2025 Sajiwa Eco System. Hak Cipta Dilindungi.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition">Kebijakan Privasi</a>
+                <a href="#" class="hover:text-white transition">Syarat & Ketentuan</a>
+                <a href="#" class="hover:text-white transition">FAQ</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        // 1. Saat Halaman Selesai Dimuat -> Hilangkan Loader
+        window.addEventListener("load", function() {
+            const loader = document.getElementById("page-loader");
+            loader.classList.add("loader-hidden");
+        });
+
+        // 2. Fungsi Animasi Keluar (Saat klik link)
+        function animateTransition(event, url, isForm = false) {
+            // Jika hanya buka menu mobile, jangan animasi
+            if (!url && !isForm) return;
+
+            // Jika user menekan CTRL/CMD (buka tab baru), biarkan default
+            if (event.metaKey || event.ctrlKey) return;
+
+            event.preventDefault(); // Stop pindah halaman dulu
+            
+            const loader = document.getElementById("page-loader");
+            loader.classList.remove("loader-hidden"); // Munculkan loader lagi
+
+            // Tunggu sedikit supaya animasi loading terlihat, baru pindah
+            setTimeout(() => {
+                if (isForm) {
+                    event.target.closest('form').submit(); // Submit form logout
+                } else {
+                    window.location.href = url; // Pindah halaman
+                }
+            }, 500); // 0.5 detik delay
+        }
+    </script>
+</body>
+</html>

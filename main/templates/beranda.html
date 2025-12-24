@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .glass-clean {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    }
+    
+    .shimmer {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .shimmer::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+        );
+        transform: rotate(45deg);
+        animation: shimmer 4s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-150%) rotate(45deg); }
+        100% { transform: translateX(150%) rotate(45deg); }
+    }
+
+    .blob {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(45, 212, 191, 0.2) 100%);
+        filter: blur(80px);
+        border-radius: 50%;
+        z-index: -1;
+        animation: move 20s infinite alternate;
+    }
+
+    @keyframes move {
+        from { transform: translate(-10%, -10%) scale(1); }
+        to { transform: translate(20%, 20%) scale(1.2); }
+    }
+</style>
+
+<div class="relative min-h-screen">
+    <div class="blob top-0 left-0"></div>
+    <div class="blob bottom-0 right-0" style="animation-delay: -5s; background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);"></div>
+
+    <div class="relative pt-10 pb-24 flex flex-col lg:flex-row items-center justify-between gap-16">
+        
+        <div class="flex-1 space-y-8 text-center lg:text-left animate-fade-in-up">
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-emerald-800 to-emerald-600 border border-emerald-200/50 shadow-lg shimmer">
+                <i class="fa-solid fa-star text-amber-500 animate-pulse"></i>
+                <span class="text-[12px] font-black text-white tracking-[0.3em] uppercase">The Future of Waste</span>
+            </div>
+
+            <h1 class="text-6xl lg:text-8xl font-black text-emerald-950 tracking-tighter leading-[0.95]">
+                Bersih Itu <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-700 drop-shadow-sm">
+                    Investasi.
+                </span>
+            </h1>
+
+            <p class="text-emerald-900/60 text-xl max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium italic">
+                "Ubah cara pandangmu terhadap sampah. Dari beban menjadi aset, dari kotor menjadi berkilau."
+            </p>
+
+            <div class="flex flex-wrap justify-center lg:justify-start gap-5 pt-6">
+                <a href="{% url 'jemput' %}" class="relative group px-10 py-5 bg-gradient-to-r from-emerald-800 to-emerald-600 rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(5,150,105,0.3)] hover:shadow-emerald-500/50 transition-all duration-500 hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <span class="relative z-10 text-white font-black flex items-center gap-3">
+                        MULAI SEKARANG <i class="fa-solid fa-arrow-right-long"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <div class="flex-1 relative">
+            <div class="relative w-72 h-72 lg:w-[400px] lg:h-[400px] mx-auto">
+                <div class="absolute inset-0 bg-white/40 backdrop-blur-3xl rounded-[4rem] border border-white/60 rotate-6 shadow-2xl overflow-hidden">
+                     <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-400/20 to-transparent"></div>
+                </div>
+                
+                <div class="absolute inset-10 bg-white rounded-[3rem] shadow-2xl flex items-center justify-center transform -rotate-3 transition-transform hover:rotate-0 duration-700 border border-emerald-50">
+                    <div class="text-center">
+                        <i class="fa-solid fa-recycle text-8xl lg:text-[10rem] text-emerald-500 drop-shadow-[0_10px_20px_rgba(16,185,129,0.4)] animate-float"></i>
+                        <div class="mt-4 font-black text-emerald-900/20 text-4xl tracking-tighter uppercase">Sajiwa Eco</div>
+                    </div>
+                </div>
+
+                <div class="absolute -top-5 -right-5 w-24 h-24 bg-amber-400 rounded-3xl shadow-xl flex items-center justify-center text-white text-3xl animate-bounce" style="animation-duration: 4s;">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+                <div class="absolute -bottom-10 -left-10 glass-clean p-6 rounded-3xl border border-white shadow-2xl flex items-center gap-4 animate-float" style="animation-delay: 1s;">
+                    <div class="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Kontribusi</p>
+                        <p class="font-black text-emerald-950">+12.5 Kg CO2</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-32">
+        <div class="group relative p-10 rounded-[3rem] glass-clean hover:bg-white transition-all duration-500 hover:-translate-y-4 border border-white shadow-xl overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700"></div>
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl shadow-lg mb-8 group-hover:rotate-12 transition">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="text-2xl font-black text-emerald-950 mb-4">Instan & Cepat</h3>
+                <p class="text-emerald-900/50 leading-relaxed">Penjemputan terjadwal otomatis. Tak perlu menunggu lama, kurir kami datang secepat kilat.</p>
+            </div>
+        </div>
+
+        <div class="group relative p-10 rounded-[3rem] bg-gradient-to-r from-emerald-800 to-emerald-600 text-white hover:-translate-y-4 transition-all duration-500 shadow-[0_30px_60px_rgba(2,44,34,0.3)]">
+            <div class="absolute inset-0 "></div>
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-2xl bg-white text-emerald-950 flex items-center justify-center text-2xl shadow-lg mb-8">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                </div>
+                <h3 class="text-2xl font-black mb-4">Poin Menjadi Saldo</h3>
+                <p class="text-emerald-100/60 leading-relaxed">Setiap gram sampah plastik atau kertas yang Anda berikan dikonversi menjadi saldo digital secara real-time.</p>
+            </div>
+        </div>
+
+        <div class="group relative p-10 rounded-[3rem] glass-clean hover:bg-white transition-all duration-500 hover:-translate-y-4 border border-white shadow-xl overflow-hidden">
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl shadow-lg mb-8 group-hover:rotate-12 transition">
+                    <i class="fa-solid fa-shield-heart"></i>
+                </div>
+                <h3 class="text-2xl font-black text-emerald-950 mb-4">Terpercaya</h3>
+                <p class="text-emerald-900/50 leading-relaxed">Transparansi berat dan harga adalah prioritas utama kami dalam menjaga amanah kebersihan lingkungan.</p>
+            </div>
+        </div>
+    </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user.is_authenticated and user.profilpengguna.peran == 'admin_sajiwa' %}
+    <div class="mb-20 mt-20 bg-white/50 border border-emerald-900/5 rounded-[3rem] p-8 lg:p-12 shadow-sm">
+        <div class="flex items-center gap-4 mb-10">
+            <div class="h-12 w-2 bg-emerald-700 rounded-full"></div>
+            <div>
+                <h2 class="text-3xl font-black text-emerald-950">Panel Kendali Admin</h2>
+                <p class="text-emerald-900/60 font-medium">Kelola operasional Sajiwa dari satu tempat.</p>
+            </div>
+        </div>
+
+        <div x-data="{ activeTab: 'none' }" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <button @click="activeTab = activeTab === 'akun' ? 'none' : 'akun'" 
+                :class="activeTab === 'akun' ? 'bg-emerald-900 text-white ring-8 ring-emerald-900/10' : 'bg-white hover:bg-emerald-50 text-emerald-900'"
+                class="p-6 rounded-3xl border border-emerald-900/5 transition-all duration-300 text-left shadow-sm group">
+                <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl mb-4 shadow-inner"
+                     :class="activeTab === 'akun' ? 'bg-emerald-800 text-emerald-300' : 'bg-emerald-100 text-emerald-700'">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h3 class="font-bold text-lg">Kelola Akun</h3>
+                <p class="text-xs opacity-70 mt-1">Tambah Warga & Kurir</p>
+            </button>
+
+            <button @click="activeTab = activeTab === 'area' ? 'none' : 'area'" 
+                :class="activeTab === 'area' ? 'bg-emerald-900 text-white ring-8 ring-emerald-900/10' : 'bg-white hover:bg-emerald-50 text-emerald-900'"
+                class="p-6 rounded-3xl border border-emerald-900/5 transition-all duration-300 text-left shadow-sm group">
+                <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl mb-4 shadow-inner"
+                     :class="activeTab === 'area' ? 'bg-emerald-800 text-emerald-300' : 'bg-emerald-100 text-emerald-700'">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                </div>
+                <h3 class="font-bold text-lg">Master Area</h3>
+                <p class="text-xs opacity-70 mt-1">Atur Wilayah RT/RW</p>
+            </button>
+
+            <button @click="activeTab = activeTab === 'dana' ? 'none' : 'dana'" 
+                :class="activeTab === 'dana' ? 'bg-emerald-900 text-white ring-8 ring-emerald-900/10' : 'bg-white hover:bg-emerald-50 text-emerald-900'"
+                class="p-6 rounded-3xl border border-emerald-900/5 transition-all duration-300 text-left shadow-sm group">
+                <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl mb-4 shadow-inner"
+                     :class="activeTab === 'dana' ? 'bg-emerald-800 text-emerald-300' : 'bg-emerald-100 text-emerald-700'">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <h3 class="font-bold text-lg">Keuangan</h3>
+                <p class="text-xs opacity-70 mt-1">Distribusi Dana & Gaji</p>
+            </button>
+
+            <div class="col-span-1 md:col-span-3 mt-4">
+                <div x-show="activeTab !== 'none'" x-transition class="bg-white border-2 border-emerald-900/5 p-8 rounded-[2rem] shadow-xl">
+                    
+                    <div x-show="activeTab === 'akun'">
+                        <h4 class="text-xl font-black text-emerald-950 mb-6 flex items-center gap-2"><i class="fa-solid fa-plus-circle text-emerald-600"></i> Registrasi User Baru</h4>
+                        <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {% csrf_token %}
+                            <input type="text" name="username" class="w-full bg-emerald-50 border-2 border-transparent focus:border-emerald-500 rounded-xl px-5 py-3 outline-none transition" placeholder="Username" required>
+                            <input type="email" name="email" class="w-full bg-emerald-50 border-2 border-transparent focus:border-emerald-500 rounded-xl px-5 py-3 outline-none transition" placeholder="Email" required>
+                            <input type="password" name="password" class="w-full bg-emerald-50 border-2 border-transparent focus:border-emerald-500 rounded-xl px-5 py-3 outline-none transition" placeholder="Password" required>
+                            <input type="text" name="no_hp" class="w-full bg-emerald-50 border-2 border-transparent focus:border-emerald-500 rounded-xl px-5 py-3 outline-none transition" placeholder="Nomor WhatsApp">
+                            <select name="peran" class="w-full bg-emerald-50 border-2 border-transparent focus:border-emerald-500 rounded-xl px-5 py-3 outline-none transition md:col-span-2">
+                                <option value="warga">Warga</option>
+                                <option value="kurir">Kurir</option>
+                                <option value="admin_sajiwa">Administrator</option>
+                            </select>
+                            <button type="submit" name="submit_akun" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-4 rounded-xl shadow-lg transition md:col-span-2">Simpan Akun</button>
+                        </form>
+                    </div>
+
+                    <div x-show="activeTab === 'area'">
+                        <h4 class="text-xl font-black text-emerald-950 mb-6">Tambah Area Lingkungan</h4>
+                        <form method="POST" class="space-y-4">
+                            {% csrf_token %}
+                            <input type="text" name="nama_jalan" class="w-full bg-emerald-50 border-2 border-transparent focus:border-emerald-500 rounded-xl px-5 py-3 outline-none transition" placeholder="Nama Jalan / Perumahan" required>
+                            <input type="text" name="rt_rw" class="w-full bg-emerald-50 border-2 border-transparent focus:border-emerald-500 rounded-xl px-5 py-3 outline-none transition" placeholder="RT / RW" required>
+                            <button type="submit" name="submit_area" class="w-full bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg transition">Tambah Area</button>
+                        </form>
+                    </div>
+
+                    <div x-show="activeTab === 'dana'">
+                        <h4 class="text-xl font-black text-emerald-950 mb-6">Distribusi Dana Massal</h4>
+                        <form method="POST" class="space-y-4">
+                            {% csrf_token %}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <select name="target" class="w-full bg-emerald-50 rounded-xl px-5 py-3 outline-none transition border-2 border-transparent focus:border-emerald-500">
+                                    <option value="kurir">Semua Kurir</option>
+                                    <option value="warga">Semua Warga</option>
+                                </select>
+                                <input type="number" name="total_dana" class="w-full bg-emerald-50 rounded-xl px-5 py-3 outline-none transition border-2 border-transparent focus:border-emerald-500" placeholder="Total Nominal" required>
+                            </div>
+                            <input type="text" name="keterangan" class="w-full bg-emerald-50 rounded-xl px-5 py-3 outline-none transition border-2 border-transparent focus:border-emerald-500" placeholder="Keterangan (Contoh: Gaji Januari 2025)" required>
+                            <button type="submit" name="submit_bayar" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-4 rounded-xl shadow-lg transition md:col-span-2">Proses Transfer</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+    <div class="mb-24">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
+        <div class="text-center md:text-left">
+            <h2 class="text-3xl font-black text-emerald-950">Berita & Edukasi</h2>
+            <p class="text-emerald-900/60 font-medium">Tips mengelola limbah dan info kegiatan terbaru.</p>
+        </div>
+        <a href="{% url 'berita' %}" onclick="animateTransition(event, this.href)" class="px-8 py-3 rounded-full bg-emerald-100 text-emerald-700 font-bold hover:bg-emerald-200 transition">
+            Lihat Semua Kabar
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for b in berita_preview %}
+        <div class="bg-white rounded-[2rem] overflow-hidden border border-emerald-900/5 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500 flex flex-col h-full group">
+            <div class="h-52 relative overflow-hidden">
+                {% if b.gambar %}
+                    <img src="{{ b.gambar.url }}" alt="{{ b.judul }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                {% else %}
+                    <div class="w-full h-full bg-emerald-900 flex items-center justify-center">
+                        <i class="fa-solid fa-image text-white/20 text-4xl"></i>
+                    </div>
+                {% endif %}
+                <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-[10px] font-black text-emerald-900 uppercase tracking-widest">
+                    {{ b.tanggal_upload|date:"d M Y" }}
+                </div>
+            </div>
+            <div class="p-8 flex flex-col flex-grow">
+                <h3 class="text-xl font-bold text-emerald-950 mb-3 line-clamp-2 leading-tight group-hover:text-emerald-600 transition">
+                    {{ b.judul }}
+                </h3>
+                <p class="text-emerald-900/60 text-sm line-clamp-3 mb-6 font-medium">
+                    {{ b.isi }}
+                </p>
+                <div class="mt-auto pt-6 border-t border-emerald-50">
+                    <a href="{% url 'berita' %}" class="inline-flex items-center gap-2 text-emerald-700 font-bold text-sm hover:gap-4 transition-all">
+                        Baca Artikel <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full py-20 text-center bg-emerald-900/5 rounded-[3rem] border-2 border-dashed border-emerald-900/10">
+            <i class="fa-regular fa-folder-open text-5xl text-emerald-200 mb-4"></i>
+            <p class="text-emerald-900/40 font-bold">Belum ada berita yang diterbitkan.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
+
+{% endblock %}
